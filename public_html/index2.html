@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+Main Index:
+<br/>
+SessionID: ${ SessionID }
+<br/>
+Message: ${ message }
+<br/>
+<#if login??>
+    Hi ${login}, How are you?
+</#if>
+<br/>
+<#if profile??>
+    Login: ${profile.name}
+    Email: ${profile.email}
+</#if>
+</body>
+</html>

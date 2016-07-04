@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Arena</title>
+    <link rel="stylesheet" href="/css/arena.css"/>
+</head>
+<body>
+Arena:
+<h2>Панель управления:</h2>
+<div class="panel"></div>
+
+<h2>Список заявок на игру:</h2>
+<div class="games"></div>
+<h2>Игра:</h2>
+<div class="game">
+    <div class="game_object"></div>
+    <div class="source"></div>
+</div>
+<div class="result">
+
+</div>
+<a href="/homepage">Домой</a><br/><br/>
+
+<script id="entry-template" type="text/x-handlebars-template">
+    <div class="entry">
+        <h1>{{title}}</h1>
+        <div class="body">
+            {{body}}
+        </div>
+    </div>
+</script>
+
+<script id="game-list-with-button-template" type="text/x-handlebars-template">
+    {{#list games}}
+    {{gameSessionId}} - {{login}} <button class="accept" data-gamesessionid="{{gameSessionId}}">Принять заявку</button>
+    {{/list}}
+</script>
+
+<script id="game-list-without-button-template" type="text/x-handlebars-template">
+    {{#list games}}
+    {{gameSessionId}} - {{login}}
+    {{/list}}
+</script>
+
+<script id="panel-apply-template" type="text/x-handlebars-template">
+    <button class="apply">Подать заявку</button>
+</script>
+
+<script id="panel-cancel-template" type="text/x-handlebars-template">
+    <b>Ждем достойного соперника... </b> <button class="cancel">Отменить заявку</button>
+</script>
+
+<script id="source-template" type="text/x-handlebars-template">
+    Вы {{click_count_player}} - Соперник {{click_count_enemy}}
+</script>
+
+<script id="finish-game-template" type="text/x-handlebars-template">
+    Счет: {{score_player}} - {{score_enemy}}
+    <br/>Результат: {{result}}
+</script>
+
+<script src="/js/lib/jquery-3.0.0.min.js"></script>
+<script src="/js/lib/spin.min.js"></script>
+<script src="/js/lib/handlebars-v4.0.5.js"></script>
+<script>
+    Handlebars.registerHelper('list', function(context, options) {
+    var ret = "<ul>";
+
+        for(var i=0, j=context.length; i<j; i++) {
+        ret = ret + "<li>" + options.fn(context[i]) + "</li>";
+        }
+
+        return ret + "</ul>";
+    });
+</script>
+<script src="/js/arena.js"></script>
+</body>
+</html>
