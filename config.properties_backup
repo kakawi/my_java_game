@@ -1,0 +1,8 @@
+port=8080
+hibernate_hbm2ddl_auto=validate
+#hibernate_show_sql=true
+db=mysql
+db_host=localhost
+db_name=java_myserver
+db_username=server_user
+db_password=blabla

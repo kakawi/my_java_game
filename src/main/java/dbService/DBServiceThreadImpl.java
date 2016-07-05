@@ -46,7 +46,7 @@ public class DBServiceThreadImpl implements DBServiceThread, Runnable, Abonent {
 
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/java_myserver");
+        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://" + this.properties.getProperty("db_host") + ":3306/" + this.properties.getProperty("db_name"));
         configuration.setProperty("hibernate.connection.username",  this.properties.getProperty("db_username"));
         configuration.setProperty("hibernate.connection.password", this.properties.getProperty("db_password"));
         configuration.setProperty("hibernate.show_sql", this.properties.getProperty("hibernate_show_sql"));
