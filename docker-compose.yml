@@ -1,0 +1,34 @@
+version: '2'
+services: 
+  mysqlHost:
+    image: centurylink/mysql
+    environment:
+      - MYSQL_DATABASE=java_game_server
+      - MYSQL_USER=java_user
+      - MYSQL_PASSWORD=boLfJ31
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - gameNet
+    
+
+  my_game:
+    image: kakawi/my_game
+    depends_on:
+      - mysqlHost
+    entrypoint: ./wait-for-it.sh mysqlHost:3306 --timeout=0 -- java -jar server.jar
+    ports:
+      - "8080:8080"
+    networks:
+      - gameNet
+
+
+volumes:
+  mysql-data:
+    external: true
+
+networks: 
+  gameNet:
+    driver: bridge
