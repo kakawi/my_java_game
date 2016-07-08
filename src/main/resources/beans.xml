@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:annotation-config/>
+
+    <bean id="accountService" class="accounts.AccountService"/>
+    <bean id="frontend" class="main.FrontendImpl"/>
+    <bean id="dbService" class="dbService.DBServiceImpl">
+        <constructor-arg name="properties">
+            <props>
+                <prop key="hibernate_hbm2ddl_auto">update</prop>
+                <prop key="db">mysql</prop>
+                <!--<prop key="db_host">mysqlHost</prop>-->
+                <prop key="db_host">localhost</prop>
+                <prop key="db_name">java_game_server</prop>
+                <prop key="db_username">java_user</prop>
+                <prop key="db_password">boLfJ31</prop>
+            </props>
+        </constructor-arg>
+    </bean>
+    <bean id="server" class="org.eclipse.jetty.server.Server">
+        <constructor-arg name="port" value="8080"/>
+    </bean>
+    <bean id="dbServiceThread" class="dbService.DBServiceThreadImpl">
+        <constructor-arg name="properties">
+            <props>
+                <prop key="hibernate_hbm2ddl_auto">validate</prop>
+                <prop key="db">mysql</prop>
+                <!--<prop key="db_host">mysqlHost</prop>-->
+                <prop key="db_host">localhost</prop>
+                <prop key="db_name">java_game_server</prop>
+                <prop key="db_username">java_user</prop>
+                <prop key="db_password">boLfJ31</prop>
+            </props>
+        </constructor-arg>
+        <constructor-arg name="messageSystem" ref="messageSystem"/>
+    </bean>
+
+    <bean id="messageSystem" class="messageSystem.MessageSystem">
+        <constructor-arg name="addressService" >
+            <bean class="messageSystem.AddressService"/>
+        </constructor-arg>
+    </bean>
+
+    <bean class="game.GameServiceImpl" id="gameService">
+        <constructor-arg name="messageSystem" ref="messageSystem"/>
+    </bean>
+
+    <bean class="services.GameTimerThreadImpl" id="gameTimer">
+        <constructor-arg name="messageSystem" ref="messageSystem"/>
+    </bean>
+
+</beans>

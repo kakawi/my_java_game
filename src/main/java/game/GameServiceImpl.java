@@ -3,6 +3,7 @@ package game;
 import com.google.gson.Gson;
 import dbService.dataSets.UsersDataSet;
 import interfaces.GameServiceThread;
+import interfaces.GameTimerThread;
 import main.Game;
 import messageSystem.*;
 
@@ -137,7 +138,7 @@ public class GameServiceImpl implements GameServiceThread {
         playerInGame.put(game.getPlayer1SessionId(), game);
         playerInGame.put(game.getPlayer2SessionId(), game);
 
-        Address gameTimerAddress = messageSystem.getAddressService().getGameTimerService();
+        Address gameTimerAddress = messageSystem.getAddressService().getServiceAddress(GameTimerThread.class);
 
         // send message for GameTimerService
         Msg message = new MsgToGameTimerServiceFinishGame(getAddress(), gameTimerAddress, game);

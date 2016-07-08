@@ -1,57 +1,16 @@
 package messageSystem;
 
-import interfaces.AccountServiceThread;
-import interfaces.DBServiceThread;
-import interfaces.GameServiceThread;
-import interfaces.GameTimerThread;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AddressService {
-    private final List<Address> dbServices = new ArrayList<>();
-    private final List<Address> accountServices = new ArrayList<>();
-    private final List<Address> gameServices = new ArrayList<>();
-    private final List<Address> gameTimerServices = new ArrayList<>();
+    private final Map<Class<?>, Address> services = new HashMap<>();
 
-    private final AtomicInteger asCounter = new AtomicInteger();
-
-    public Address getDBService() {
-        final int index = asCounter.incrementAndGet() % dbServices.size();
-        return dbServices.get(index);
+    public void addService(Class<?> clazz, Abonent service) {
+        services.put(clazz, service.getAddress());
     }
 
-    public Address getAccountService() {
-        final int index = asCounter.incrementAndGet() % accountServices.size();
-        return accountServices.get(index);
+    public Address getServiceAddress(Class<?> clazz) {
+        return services.get(clazz);
     }
-
-    public Address getGameService() {
-        final int index = asCounter.incrementAndGet() % gameServices.size();
-        return gameServices.get(index);
-    }
-
-    public Address getGameTimerService() {
-        final int index = asCounter.incrementAndGet() % gameTimerServices.size();
-        return gameTimerServices.get(index);
-    }
-
-    public void addDBService(DBServiceThread dbService) {
-        dbServices.add(dbService.getAddress());
-    }
-
-    public void addAccountService(AccountServiceThread accountServiceThread) {
-        accountServices.add(accountServiceThread.getAddress());
-    }
-
-    public void addGameService(GameServiceThread gameServiceThread) {
-        gameServices.add(gameServiceThread.getAddress());
-    }
-
-    public void addGameTimerService(GameTimerThread gameTimerThread) {
-        gameTimerServices.add(gameTimerThread.getAddress());
-    }
-
-
 }

@@ -2,7 +2,7 @@ package servlets;
 
 import accounts.AccountService;
 import dbService.dataSets.UsersDataSet;
-import main.DIC;
+import org.springframework.context.ApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,10 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SignOutServlet extends HttpServlet {
-    private DIC dic;
+    private ApplicationContext applicationContext;
 
-    public SignOutServlet(DIC dic) {
-        this.dic = dic;
+    public SignOutServlet(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     private static Map<String, Object> createPageVariablesMap(HttpServletRequest request) {
@@ -32,7 +32,7 @@ public class SignOutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String sessionId = request.getSession().getId();
-        AccountService accountService = dic.get(AccountService.class);
+        AccountService accountService = ((AccountService)applicationContext.getBean("accountService"));
         UsersDataSet user = accountService.getUserBySessionId(sessionId);
 
         if (user == null) {

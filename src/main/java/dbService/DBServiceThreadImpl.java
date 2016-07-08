@@ -12,7 +12,7 @@ import org.hibernate.service.ServiceRegistry;
 
 import java.util.Properties;
 
-public class DBServiceThreadImpl implements DBServiceThread, Runnable, Abonent {
+public class DBServiceThreadImpl implements DBServiceThread {
 
     private AddressImpl address = new AddressImpl();
 

@@ -16,13 +16,9 @@ import javax.servlet.http.HttpSession;
 @SuppressWarnings("UnusedDeclaration")
 @WebSocket
 public class GameWebSocket {
-    private GameServiceThread gameService;
-    private Session session;
+    private final GameServiceThread gameService;
+    private Session webSocketSession;
     private final HttpSession httpSession;
-
-//    public GameWebSocket(GameService gameService) {
-//        this.gameService = gameService;
-//    }
 
     public GameWebSocket(GameServiceThread gameService, ServletUpgradeRequest req, ServletUpgradeResponse resp) {
         this.gameService = gameService;
@@ -30,8 +26,8 @@ public class GameWebSocket {
     }
 
     @OnWebSocketConnect
-    public void onOpen(Session session) {
-        this.session = session;
+    public void onOpen(Session webSocketSession) {
+        this.webSocketSession = webSocketSession;
         gameService.add(this, httpSession);
     }
 
@@ -70,7 +66,7 @@ public class GameWebSocket {
 
     public void sendString(String data) {
         try {
-            session.getRemote().sendString(data);
+            webSocketSession.getRemote().sendString(data);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

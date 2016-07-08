@@ -16,11 +16,18 @@ import org.hibernate.service.ServiceRegistry;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Properties;
+import java.util.Hashtable;
 
 public class DBServiceImpl implements DBService, serviceWithDIC {
-    private Properties properties = new Properties();
-    { // default properties
+//    private Properties properties = new Properties();
+//    { // default properties
+//        properties.put("db", "h2");
+//        properties.put("hibernate_show_sql", "true");
+//        properties.put("hibernate_hbm2ddl_auto", "create");
+//    }
+
+    private Hashtable<String, String> properties = new Hashtable<>();
+    {
         properties.put("db", "h2");
         properties.put("hibernate_show_sql", "true");
         properties.put("hibernate_hbm2ddl_auto", "create");
@@ -32,13 +39,13 @@ public class DBServiceImpl implements DBService, serviceWithDIC {
         this.DIC = DIC;
     }
 
-    public DBServiceImpl(Properties properties) {
+    public DBServiceImpl(Hashtable<String, String> properties) {
         this.properties.putAll(properties);
 
-        if ("mysql".equals(this.properties.getProperty("db"))) {
+        if ("mysql".equals(this.properties.get("db"))) {
             Configuration configuration = getMySqlConfiguration();
             sessionFactory = createSessionFactory(configuration);
-        } else if ("h2".equals(this.properties.getProperty("db"))) {
+        } else if ("h2".equals(this.properties.get("db"))) {
             Configuration configuration = getH2Configuration();
             sessionFactory = createSessionFactory(configuration);
         }
@@ -50,11 +57,11 @@ public class DBServiceImpl implements DBService, serviceWithDIC {
 
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://" + this.properties.getProperty("db_host") + ":3306/" + this.properties.getProperty("db_name"));
-        configuration.setProperty("hibernate.connection.username",  this.properties.getProperty("db_username"));
-        configuration.setProperty("hibernate.connection.password", this.properties.getProperty("db_password"));
-        configuration.setProperty("hibernate.show_sql", this.properties.getProperty("hibernate_show_sql"));
-        configuration.setProperty("hibernate.hbm2ddl.auto", this.properties.getProperty("hibernate_hbm2ddl_auto"));
+        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://" + this.properties.get("db_host") + ":3306/" + this.properties.get("db_name"));
+        configuration.setProperty("hibernate.connection.username",  this.properties.get("db_username"));
+        configuration.setProperty("hibernate.connection.password", this.properties.get("db_password"));
+        configuration.setProperty("hibernate.show_sql", this.properties.get("hibernate_show_sql"));
+        configuration.setProperty("hibernate.hbm2ddl.auto", this.properties.get("hibernate_hbm2ddl_auto"));
         return configuration;
     }
 
@@ -67,8 +74,8 @@ public class DBServiceImpl implements DBService, serviceWithDIC {
         configuration.setProperty("hibernate.connection.url", "jdbc:h2:./h2db");
         configuration.setProperty("hibernate.connection.username", "tully");
         configuration.setProperty("hibernate.connection.password", "tully");
-        configuration.setProperty("hibernate.show_sql", this.properties.getProperty("hibernate_show_sql"));
-        configuration.setProperty("hibernate.hbm2ddl.auto", this.properties.getProperty("hibernate_hbm2ddl_auto"));
+        configuration.setProperty("hibernate.show_sql", this.properties.get("hibernate_show_sql"));
+        configuration.setProperty("hibernate.hbm2ddl.auto", this.properties.get("hibernate_hbm2ddl_auto"));
         return configuration;
     }
 

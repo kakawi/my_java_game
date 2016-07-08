@@ -1,5 +1,6 @@
 package services;
 
+import interfaces.GameServiceThread;
 import interfaces.GameTimerThread;
 import main.Game;
 import messageSystem.*;
@@ -42,7 +43,7 @@ public class GameTimerThreadImpl implements GameTimerThread {
             e.printStackTrace();
         }
         sleepNextIteration = false;
-        Address gameServiceAddress = messageSystem.getAddressService().getGameService();
+        Address gameServiceAddress = messageSystem.getAddressService().getServiceAddress(GameServiceThread.class);
         Msg message = new MsgToGameServiceFinishGame(getAddress(), gameServiceAddress, game);
         messageSystem.sendMessage(message);
     }

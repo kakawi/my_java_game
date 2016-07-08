@@ -3,7 +3,7 @@ package servlets;
 import accounts.AccountService;
 import dbService.dataSets.UsersDataSet;
 import interfaces.Frontend;
-import main.DIC;
+import org.springframework.context.ApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class ArenaServlet extends HttpServlet {
-    private DIC dic;
+    private ApplicationContext applicationContext;
 
-    public ArenaServlet(DIC dic) {
-        this.dic = dic;
+    public ArenaServlet(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class ArenaServlet extends HttpServlet {
         pageVariables.put("flash", flash);
 
         pageVariables.put("SessionID", sessionId);
-        AccountService accountService = dic.get(AccountService.class);
+        AccountService accountService = ((AccountService)applicationContext.getBean("accountService"));
 //        UsersDataSet user = accountService.getUserBySessionId(sessionId);
         UsersDataSet user = (UsersDataSet)req.getSession().getAttribute("profile");
 //        Map<Long, Game> games = dic.get(GameServiceThread.class).getGameOffers();
@@ -37,7 +37,7 @@ public class ArenaServlet extends HttpServlet {
         if (user == null) {
             response.sendRedirect("/homepage");
         } else {
-            dic.get(Frontend.class).showPage(response, "main/arena.html", pageVariables);
+            ((Frontend)applicationContext.getBean("frontend")).showPage(response, "main/arena.html", pageVariables);
         }
     }
 }

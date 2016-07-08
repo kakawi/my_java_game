@@ -3,6 +3,7 @@ package game;
 import com.google.gson.Gson;
 import dbService.dataSets.UsersDataSet;
 import interfaces.GameServiceThread;
+import interfaces.GameTimerThread;
 import main.Game;
 import messageSystem.Address;
 import messageSystem.AddressService;
@@ -190,7 +191,7 @@ public class GameServiceImplTest {
         AddressService addressService = mock(AddressService.class);
         when(messageSystem.getAddressService()).thenReturn(addressService);
         Address address = mock(Address.class);
-        when(addressService.getGameTimerService()).thenReturn(address);
+        when(addressService.getServiceAddress(GameTimerThread.class)).thenReturn(address);
 
         GameServiceThread gameServiceThreadSpy = spy(gameServiceThread);
         gameServiceThreadSpy.acceptOffer(httpSession, gameSessionId); // Checked method

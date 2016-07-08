@@ -4,7 +4,7 @@ import accounts.AccountService;
 import com.google.gson.Gson;
 import dbService.dataSets.UsersDataSet;
 import interfaces.Frontend;
-import main.DIC;
+import org.springframework.context.ApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,10 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SignInServlet extends HttpServlet {
-    private DIC dic;
+    private ApplicationContext applicationContext;
 
-    public SignInServlet(DIC dic) {
-        this.dic = dic;
+    public SignInServlet(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     private static Map<String, Object> createPageVariablesMap(HttpServletRequest request) {
@@ -33,7 +33,7 @@ public class SignInServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        dic.get(Frontend.class).showPage(response, "main/signin.html");
+        ((Frontend)applicationContext.getBean("frontend")).showPage(response, "main/signin.html");
     }
 
     @Override
@@ -48,7 +48,7 @@ public class SignInServlet extends HttpServlet {
         }
 
         try {
-            AccountService accountService = dic.get(AccountService.class);
+            AccountService accountService = (AccountService)applicationContext.getBean("accountService");
             UsersDataSet user = accountService.getUserByLogin(login);
 
             if (user == null || !user.getPassword().equals(password)) {

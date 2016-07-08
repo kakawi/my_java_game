@@ -3,7 +3,7 @@ package servlets;
 import accounts.AccountService;
 import dbService.dataSets.UsersDataSet;
 import interfaces.Frontend;
-import main.DIC;
+import org.springframework.context.ApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class MainServlet extends HttpServlet {
-    private DIC dic;
+    private ApplicationContext applicationContext;
 
-    public MainServlet(DIC dic) {
-        this.dic = dic;
+    public MainServlet(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class MainServlet extends HttpServlet {
         pageVariables.put("flash", flash);
 
         pageVariables.put("SessionID", sessionId);
-        AccountService accountService = dic.get(AccountService.class);
+        AccountService accountService = (AccountService)applicationContext.getBean("accountService");
         UsersDataSet user = accountService.getUserBySessionId(sessionId);
         if (user == null) {
             pageVariables.put("message", "Вы не авторизованы");
@@ -37,6 +37,6 @@ public class MainServlet extends HttpServlet {
             pageVariables.put("profile", user);
         }
 
-        dic.get(Frontend.class).showPage(response, "main/homepage.html", pageVariables);
+        ((Frontend)applicationContext.getBean("frontend")).showPage(response, "main/homepage.html", pageVariables);
     }
 }

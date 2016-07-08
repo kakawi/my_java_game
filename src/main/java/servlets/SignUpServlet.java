@@ -3,7 +3,7 @@ package servlets;
 import accounts.AccountService;
 import dbService.dataSets.UsersDataSet;
 import interfaces.Frontend;
-import main.DIC;
+import org.springframework.context.ApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,15 +12,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class SignUpServlet extends HttpServlet {
-    private DIC dic;
+    private ApplicationContext applicationContext;
 
-    public SignUpServlet(DIC dic) {
-        this.dic = dic;
+    public SignUpServlet(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        dic.get(Frontend.class).showPage(response, "main/signup.html");
+        ((Frontend)applicationContext.getBean("frontend")).showPage(response, "main/signup.html");
     }
 
     @Override
@@ -31,7 +31,7 @@ public class SignUpServlet extends HttpServlet {
         // TODO: add check for existed user
         UsersDataSet user = new UsersDataSet(login, password, email);
         try {
-            AccountService accountService = dic.get(AccountService.class);
+            AccountService accountService = ((AccountService)applicationContext.getBean("accountService"));
             accountService.addNewUser(user);
         } catch (Exception e) {
             e.printStackTrace();
