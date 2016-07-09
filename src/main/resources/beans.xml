@@ -17,8 +17,8 @@
             <props>
                 <prop key="hibernate_hbm2ddl_auto">update</prop>
                 <prop key="db">mysql</prop>
-                <!--<prop key="db_host">mysqlHost</prop>-->
-                <prop key="db_host">localhost</prop>
+                <prop key="db_host">mysqlHost</prop>
+                <!--<prop key="db_host">localhost</prop>-->
                 <prop key="db_name">java_game_server</prop>
                 <prop key="db_username">java_user</prop>
                 <prop key="db_password">boLfJ31</prop>
@@ -33,8 +33,8 @@
             <props>
                 <prop key="hibernate_hbm2ddl_auto">validate</prop>
                 <prop key="db">mysql</prop>
-                <!--<prop key="db_host">mysqlHost</prop>-->
-                <prop key="db_host">localhost</prop>
+                <prop key="db_host">mysqlHost</prop>
+                <!--<prop key="db_host">localhost</prop>-->
                 <prop key="db_name">java_game_server</prop>
                 <prop key="db_username">java_user</prop>
                 <prop key="db_password">boLfJ31</prop>
