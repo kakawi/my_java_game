@@ -3,35 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Homepage</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css"/>
 </head>
 <body>
-Добро пожаловать в игру...
-<br/>
 
-<#if message??>
-    Message: ${ message }
-</#if>
-<br/>
-<#if flash??>
-    Flash: ${ flash }
-</#if>
-<br/>
-<#if login??>
-    Hi ${login}, How are you?
-</#if>
-<br/>
-<#if profile??>
-    Login: ${profile.login}
-    <#if profile.email??>
-        Email: ${profile.email}
-    </#if>
-</#if>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h4>Links</h4>
+            <a href="/arena" class="btn btn-primary">Arena</a><br/><br/>
+            <a href="/signup" class="btn btn-default">Register</a><br/>
+            <a href="/signin" class="btn btn-default">Login</a><br/>
+            <a href="/signout" class="btn btn-danger">Logout</a><br/>
+        </div>
+        <div class="col-md-4">
+            Welcome in game...
+            <br/>
 
-<h2>Links</h2>
-<a href="/arena">Arena</a><br/><br/>
-<a href="/signup">Register</a><br/>
-<a href="/signin">Login</a><br/>
-<a href="/signout">Logout</a><br/>
+            <#if message??>
+                Message: ${ message }
+            </#if>
+            <br/>
+            <#if profile??>
+                Hi <b>${profile.login}</b>, How are you?
+            </#if>
+        </div>
+    </div>
+</div>
+
 <script src="/js/main.js"></script>
 </body>
 </html>

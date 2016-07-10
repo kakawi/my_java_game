@@ -12,23 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class SignInServlet extends HttpServlet {
     private ApplicationContext applicationContext;
 
     public SignInServlet(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
-    }
-
-    private static Map<String, Object> createPageVariablesMap(HttpServletRequest request) {
-        Map<String, Object> pageVariables = new HashMap<>();
-        pageVariables.put("method", request.getMethod());
-        pageVariables.put("URL", request.getRequestURL().toString());
-//        pageVariables.put("pathInfo", request.getPathInfo());
-        pageVariables.put("sessionId", request.getSession().getId());
-        pageVariables.put("parameters", request.getParameterMap().toString());
-        return pageVariables;
     }
 
     @Override
@@ -54,14 +43,17 @@ public class SignInServlet extends HttpServlet {
             if (user == null || !user.getPassword().equals(password)) {
                 response.setContentType("text/html;charset=utf-8");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                HashMap<String, Object> pageVariables = new HashMap<>();
+                pageVariables.put("login", login);
+                pageVariables.put("message", "Login/password is incorrect");
+                ((Frontend)applicationContext.getBean("frontend")).showPage(response, "main/signin.html", pageVariables);
                 return;
             }
 
-//            accountService.addSession(req.getSession().getId(), user);
             req.getSession().setAttribute("profile", user);
             Gson gson = new Gson();
             String json = gson.toJson(user);
-            response.sendRedirect("/homepage?flash=" + "Login " + json);
+            response.sendRedirect("/homepage?message=" + "Login " + json);
         } catch (Exception e) {
             e.printStackTrace();
         }

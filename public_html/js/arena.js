@@ -134,6 +134,9 @@
                 case 'finish_game':
                     responseFinishGame(json);
                     break;
+                case 'get_user_data':
+                    responseGetUserData(json);
+                    break;
             }
 
             console.log("Return: " + event.data)
@@ -245,6 +248,18 @@
                     self.showApply();
                     self.enablePanel();
                     self.enabledOffers();
+                    self.requestGetStatus();
+                    break;
+            }
+        };
+
+        function responseGetUserData(data) {
+            switch (data['status']) {
+                case 'done':
+                    var source = $("#user-data").html();
+                    var template = Handlebars.compile(source);
+                    var html    = template(data);
+                    $('.status').html(html);
                     break;
             }
         };

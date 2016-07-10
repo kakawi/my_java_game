@@ -1,6 +1,5 @@
 package servlets;
 
-import accounts.AccountService;
 import dbService.dataSets.UsersDataSet;
 import interfaces.Frontend;
 import org.springframework.context.ApplicationContext;
@@ -28,12 +27,8 @@ public class ArenaServlet extends HttpServlet {
         pageVariables.put("flash", flash);
 
         pageVariables.put("SessionID", sessionId);
-        AccountService accountService = ((AccountService)applicationContext.getBean("accountService"));
-//        UsersDataSet user = accountService.getUserBySessionId(sessionId);
         UsersDataSet user = (UsersDataSet)req.getSession().getAttribute("profile");
-//        Map<Long, Game> games = dic.get(GameServiceThread.class).getGameOffers();
 
-//        pageVariables.put("games", games);
         if (user == null) {
             response.sendRedirect("/homepage");
         } else {

@@ -1,7 +1,9 @@
 package servlets;
 
 import accounts.AccountService;
+import dbService.DBException;
 import dbService.dataSets.UsersDataSet;
+import interfaces.DBService;
 import interfaces.Frontend;
 import org.springframework.context.ApplicationContext;
 
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class SignUpServlet extends HttpServlet {
     private ApplicationContext applicationContext;
@@ -28,7 +31,21 @@ public class SignUpServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String email = req.getParameter("email");
-        // TODO: add check for existed user
+
+        DBService dbService = (DBService) applicationContext.getBean("dbService");
+        try {
+            UsersDataSet user = dbService.getUserByLogin(login);
+            if (user != null) {
+                HashMap<String, Object> pageVariables = new HashMap<>();
+                pageVariables.put("message", "The user with login: <b>" + user.getLogin() + "</b> have registered");
+                ((Frontend)applicationContext.getBean("frontend")).showPage(response, "main/signup.html", pageVariables);
+                return;
+            }
+
+        } catch (DBException e) {
+            e.printStackTrace();
+        }
+
         UsersDataSet user = new UsersDataSet(login, password, email);
         try {
             AccountService accountService = ((AccountService)applicationContext.getBean("accountService"));

@@ -1,6 +1,5 @@
 package servlets;
 
-import accounts.AccountService;
 import dbService.dataSets.UsersDataSet;
 import interfaces.Frontend;
 import org.springframework.context.ApplicationContext;
@@ -22,16 +21,13 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
         HashMap<String, Object> pageVariables = new HashMap<>();
-        String sessionId = req.getSession().getId();
 
-        String flash = req.getParameter("flash");
-        pageVariables.put("flash", flash);
+        String flash = req.getParameter("message");
+        pageVariables.put("message", flash);
 
-        pageVariables.put("SessionID", sessionId);
-        AccountService accountService = (AccountService)applicationContext.getBean("accountService");
-        UsersDataSet user = accountService.getUserBySessionId(sessionId);
+        UsersDataSet user = (UsersDataSet)req.getSession().getAttribute("profile");
         if (user == null) {
-            pageVariables.put("message", "Вы не авторизованы");
+            pageVariables.put("message", "You're not authorized");
         } else {
             pageVariables.put("login", user.getLogin());
             pageVariables.put("profile", user);

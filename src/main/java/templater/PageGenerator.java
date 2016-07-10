@@ -23,14 +23,7 @@ public class PageGenerator {
     }
 
     public String getPage(String filename) {
-        Writer stream = new StringWriter();
-        try {
-            Template template = cfg.getTemplate(HTML_DIR + File.separator + filename);
-            template.dump(stream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return stream.toString();
+        return getPage(filename, null);
     }
 
     public String getPage(String filename, Map<String, Object> data) {

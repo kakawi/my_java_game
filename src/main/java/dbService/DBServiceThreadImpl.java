@@ -1,11 +1,14 @@
 package dbService;
 
+import dbService.dao.UsersDAO;
 import dbService.dataSets.UsersDataSet;
 import interfaces.DBServiceThread;
-import messageSystem.Abonent;
 import messageSystem.AddressImpl;
 import messageSystem.MessageSystem;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
@@ -25,6 +28,11 @@ public class DBServiceThreadImpl implements DBServiceThread {
     private SessionFactory sessionFactory;
 
     private MessageSystem messageSystem;
+
+    @Override
+    public MessageSystem getMessageSystem() {
+        return messageSystem;
+    }
 
     public DBServiceThreadImpl(Properties properties, MessageSystem messageSystem) {
         this.properties.putAll(properties);
@@ -89,6 +97,30 @@ public class DBServiceThreadImpl implements DBServiceThread {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public UsersDataSet getUserByLogin(String login) throws DBException {
+        try {
+            Session session = sessionFactory.openSession();
+            UsersDAO dao = new UsersDAO(session);
+            UsersDataSet dataSet = dao.getUserByLogin(login);
+            session.close();
+            return dataSet;
+        } catch (HibernateException e) {
+            throw new DBException(e);
+        }
+    }
+
+    public void update(UsersDataSet usersDataSet) throws DBException {
+        try {
+            Session session = sessionFactory.openSession();
+            Transaction transaction = session.beginTransaction();
+            session.update(usersDataSet);
+            transaction.commit();
+            session.close();
+        } catch (HibernateException e) {
+            throw new DBException(e);
         }
     }
 }

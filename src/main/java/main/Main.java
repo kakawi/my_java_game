@@ -4,7 +4,6 @@ import interfaces.DBServiceThread;
 import interfaces.GameServiceThread;
 import interfaces.GameTimerThread;
 import messageSystem.MessageSystem;
-import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
@@ -23,7 +22,7 @@ public class Main {
 //        accountService.addNewUser(new UsersDataSet("Hleb", "1234", "hlebon@localhost.ru"));
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/");
+//        context.setContextPath("/");
 
         context.addServlet(new ServletHolder(new SignUpServlet(springContext)), "/signup");
         context.addServlet(new ServletHolder(new SignInServlet(springContext)), "/signin");
@@ -32,11 +31,12 @@ public class Main {
         context.addServlet(new ServletHolder(new ArenaServlet(springContext)), "/arena");
         context.addServlet(new ServletHolder(new WebSocketArenaServlet(springContext)), "/game");
 
-        ResourceHandler resource_handler = new ResourceHandler();
-        resource_handler.setResourceBase("public_html");
+        ResourceHandler resourceHandler = new ResourceHandler();
+        resourceHandler.setResourceBase("public_html");
 
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[]{resource_handler, context});
+        handlers.addHandler(resourceHandler);
+        handlers.addHandler(context);
 
         Server server = (Server) springContext.getBean("server");
         server.setHandler(handlers);
@@ -63,6 +63,8 @@ public class Main {
         (new Thread(dbServiceThread)).start();
         (new Thread(gameServiceThread)).start();
         (new Thread(gameTimerThread)).start();
+
+
 
         server.start();
         server.join();

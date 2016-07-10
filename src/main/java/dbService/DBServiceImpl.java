@@ -3,8 +3,6 @@ package dbService;
 import dbService.dao.UsersDAO;
 import dbService.dataSets.UsersDataSet;
 import interfaces.DBService;
-import interfaces.serviceWithDIC;
-import main.DIC;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -18,14 +16,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Hashtable;
 
-public class DBServiceImpl implements DBService, serviceWithDIC {
-//    private Properties properties = new Properties();
-//    { // default properties
-//        properties.put("db", "h2");
-//        properties.put("hibernate_show_sql", "true");
-//        properties.put("hibernate_hbm2ddl_auto", "create");
-//    }
-
+public class DBServiceImpl implements DBService {
     private Hashtable<String, String> properties = new Hashtable<>();
     {
         properties.put("db", "h2");
@@ -33,11 +24,6 @@ public class DBServiceImpl implements DBService, serviceWithDIC {
         properties.put("hibernate_hbm2ddl_auto", "create");
     }
     private SessionFactory sessionFactory;
-    private DIC DIC;
-
-    public void setDIC(DIC DIC) {
-        this.DIC = DIC;
-    }
 
     public DBServiceImpl(Hashtable<String, String> properties) {
         this.properties.putAll(properties);

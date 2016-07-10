@@ -1,18 +1,18 @@
 package messageSystem;
 
-import interfaces.DBService;
+import interfaces.DBServiceThread;
 
 public abstract class MsgToDBService extends Msg{
-    public MsgToDBService(AddressImpl from, AddressImpl to) {
+    public MsgToDBService(Address from, Address to) {
         super(from, to);
     }
 
     @Override
     public void exec(Abonent abonent) {
-        if(abonent instanceof DBService) {
-            exec((DBService) abonent);
+        if(abonent instanceof DBServiceThread) {
+            exec((DBServiceThread) abonent);
         }
     }
 
-    abstract void exec(DBService dbService);
+    abstract void exec(DBServiceThread dbServiceThread);
 }

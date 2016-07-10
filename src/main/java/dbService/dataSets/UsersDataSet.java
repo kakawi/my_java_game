@@ -1,5 +1,7 @@
 package dbService.dataSets;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -16,10 +18,46 @@ public class UsersDataSet implements Serializable { // Serializable Important to
     @Column(name = "login", unique = true, updatable = false)
     private String login;
 
-    public UsersDataSet(String login, String password, String email) {
-        this.login = login;
-        this.password = password;
-        this.email = email;
+    @Column(name = "password", updatable = false)
+    private String password;
+
+    @Column(name = "email", unique = true, updatable = false)
+    private String email;
+
+    @Column(name = "wins")
+    @Type(type = "int")
+    private Integer wins = 0;
+
+    @Column(name = "defeats")
+    @Type(type = "int")
+    private Integer defeats = 0;
+
+    @Column(name = "draws")
+    @Type(type = "int")
+    private Integer draws = 0;
+
+    public Integer getWins() {
+        return wins;
+    }
+
+    public void setWins(Integer wins) {
+        this.wins = wins;
+    }
+
+    public Integer getDefeats() {
+        return defeats;
+    }
+
+    public void setDefeats(Integer defeats) {
+        this.defeats = defeats;
+    }
+
+    public Integer getDraws() {
+        return draws;
+    }
+
+    public void setDraws(Integer draws) {
+        this.draws = draws;
     }
 
     public String getPassword() {
@@ -31,9 +69,6 @@ public class UsersDataSet implements Serializable { // Serializable Important to
         this.password = password;
     }
 
-    @Column(name = "password", updatable = false)
-    private String password;
-
     public String getEmail() {
         return email;
     }
@@ -41,9 +76,6 @@ public class UsersDataSet implements Serializable { // Serializable Important to
     public void setEmail(String email) {
         this.email = email;
     }
-
-    @Column(name = "email", unique = true, updatable = false)
-    private String email;
 
     //Important to Hibernate!
     @SuppressWarnings("UnusedDeclaration")
@@ -59,6 +91,12 @@ public class UsersDataSet implements Serializable { // Serializable Important to
     public UsersDataSet(String name) {
         this.setId(-1);
         this.setLogin(name);
+    }
+
+    public UsersDataSet(String login, String password, String email) {
+        this.login = login;
+        this.password = password;
+        this.email = email;
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -84,5 +122,17 @@ public class UsersDataSet implements Serializable { // Serializable Important to
                 "id=" + id +
                 ", name='" + login + '\'' +
                 '}';
+    }
+
+    public void increaseWins() {
+        wins++;
+    }
+
+    public void increaseDefeats() {
+        defeats++;
+    }
+
+    public void increaseDraws() {
+        draws++;
     }
 }

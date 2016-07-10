@@ -1,5 +1,6 @@
 package interfaces;
 
+import dbService.dataSets.UsersDataSet;
 import game.GameWebSocket;
 import game.JSRequest;
 import main.Game;
@@ -26,4 +27,5 @@ public interface GameServiceThread extends Runnable, Abonent{
     void increaseClickCount(HttpSession session);
     void getGameOffers(String httpSessionId);
     void finishGame(Game game);
+    void sendUserData(HttpSession session, UsersDataSet user);
 }

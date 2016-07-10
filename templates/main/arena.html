@@ -4,23 +4,50 @@
     <meta charset="UTF-8">
     <title>Arena</title>
     <link rel="stylesheet" href="/css/arena.css"/>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css"/>
 </head>
 <body>
-Arena:
-<h2>Панель управления:</h2>
-<div class="panel"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h4>Панель управления</h4>
+            <div class="panel"></div>
+        </div>
+        <div class="col-md-4">
+            <h4>Статус</h4>
+            <div class="status"></div>
+        </div>
+    </div>
 
-<h2>Список заявок на игру:</h2>
-<div class="games"></div>
-<h2>Игра:</h2>
-<div class="game">
-    <div class="game_object"></div>
-    <div class="source"></div>
-</div>
-<div class="result">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Список заявок на игру:</h4>
+            <div class="games"></div>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col-md-8">
+            <div class="game">
+                <div class="game_object">Click me!</div>
+                <div class="source"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="result"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <a href="/homepage" class="btn btn-primary">Домой</a>
+        </div>
+    </div>
 </div>
-<a href="/homepage">Домой</a><br/><br/>
 
 <script id="entry-template" type="text/x-handlebars-template">
     <div class="entry">
@@ -32,23 +59,46 @@ Arena:
 </script>
 
 <script id="game-list-with-button-template" type="text/x-handlebars-template">
-    {{#list games}}
-    {{gameSessionId}} - {{login}} <button class="accept" data-gamesessionid="{{gameSessionId}}">Принять заявку</button>
-    {{/list}}
+    <table class="table">
+        <tr>
+            <th>#</th>
+            <th>Login</th>
+            <th>Action</th>
+        </tr>
+        {{#list games}}
+        <tr>
+            <td> {{gameSessionId}}</td>
+            <td>{{login}}</td>
+            <td><button class="btn btn-default accept" data-gamesessionid="{{gameSessionId}}">Принять заявку</button></td>
+        </tr>
+        {{/list}}
+    </table>
 </script>
 
 <script id="game-list-without-button-template" type="text/x-handlebars-template">
-    {{#list games}}
-    {{gameSessionId}} - {{login}}
-    {{/list}}
+    <table class="table">
+        <tr>
+            <th>#</th>
+            <th>Login</th>
+            <th>Action</th>
+        </tr>
+        {{#list games}}
+        <tr>
+            <td> {{gameSessionId}}</td>
+            <td>{{login}}</td>
+        </tr>
+        {{/list}}
+    </table>
 </script>
 
 <script id="panel-apply-template" type="text/x-handlebars-template">
-    <button class="apply">Подать заявку</button>
+    <button class="btn btn-primary apply">Подать заявку</button>
 </script>
 
 <script id="panel-cancel-template" type="text/x-handlebars-template">
-    <b>Ждем достойного соперника... </b> <button class="cancel">Отменить заявку</button>
+    <button class="btn btn-danger cancel">Отменить заявку</button>
+    <br/>
+    <b>Ждем достойного соперника... </b>
 </script>
 
 <script id="source-template" type="text/x-handlebars-template">
@@ -60,20 +110,37 @@ Arena:
     <br/>Результат: {{result}}
 </script>
 
-<script src="/js/lib/jquery-3.0.0.min.js"></script>
+<script id="user-data" type="text/x-handlebars-template">
+    <div>Побед: {{wins}}</div>
+    <div>Поражений: {{defeats}}</div>
+    <div>Ничьих: {{draws}}</div>
+</script>
+
+<script src="/js/lib/jquery-1.12.2.min.js"></script>
 <script src="/js/lib/spin.min.js"></script>
 <script src="/js/lib/handlebars-v4.0.5.js"></script>
 <script>
+//    Handlebars.registerHelper('list', function(context, options) {
+//    var ret = "<ul>";
+//
+//        for(var i=0, j=context.length; i<j; i++) {
+//        ret = ret + "<li>" + options.fn(context[i]) + "</li>";
+//        }
+//
+//        return ret + "</ul>";
+//    });
+
     Handlebars.registerHelper('list', function(context, options) {
-    var ret = "<ul>";
+        var ret;
 
         for(var i=0, j=context.length; i<j; i++) {
-        ret = ret + "<li>" + options.fn(context[i]) + "</li>";
+            ret = options.fn(context[i]);
         }
 
-        return ret + "</ul>";
+        return ret;
     });
 </script>
 <script src="/js/arena.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

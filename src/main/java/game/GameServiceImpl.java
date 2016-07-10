@@ -2,6 +2,7 @@ package game;
 
 import com.google.gson.Gson;
 import dbService.dataSets.UsersDataSet;
+import interfaces.DBServiceThread;
 import interfaces.GameServiceThread;
 import interfaces.GameTimerThread;
 import main.Game;
@@ -41,6 +42,24 @@ public class GameServiceImpl implements GameServiceThread {
 
         Gson gson = new Gson();
         sendMessage(httpSessionId, gson.toJson(answer));
+    }
+
+    public void requestToGetUserData(HttpSession session) {
+        // send the message
+        Address dbServiceThreadAddress = messageSystem.getAddressService().getServiceAddress(DBServiceThread.class);
+        Msg message = new MsgToDBServiceGetUserData(getAddress(), dbServiceThreadAddress, session);
+        messageSystem.sendMessage(message);
+    }
+
+    public void sendUserData(HttpSession httpSession, UsersDataSet user) {
+        // send answer
+        Map<String, Object> answer = getActionStatus("get_user_data", "done");
+        answer.put("wins", user.getWins());
+        answer.put("defeats", user.getDefeats());
+        answer.put("draws", user.getDraws());
+        answer.put("login", user.getLogin());
+        Gson gson = new Gson();
+        sendMessage(httpSession.getId(), gson.toJson(answer));
     }
 
     private void sendGameOffersForEverybody() {
@@ -156,6 +175,26 @@ public class GameServiceImpl implements GameServiceThread {
 
     public void finishGame(Game game) {
         game.finishGame();
+
+        UsersDataSet player1 = game.getPlayer1();
+        UsersDataSet player2 = game.getPlayer2();
+
+        if(game.getWinner() == Game.Winner.FIRST) {
+            player1.increaseWins();
+            player2.increaseDefeats();
+        } else if (game.getWinner() == Game.Winner.SECOND) {
+            player1.increaseDefeats();
+            player2.increaseWins();
+        } else {
+            player1.increaseDraws();
+            player2.increaseDraws();
+        }
+
+        // send the message
+        Address dbServiceThreadAddress = messageSystem.getAddressService().getServiceAddress(DBServiceThread.class);
+        Msg message = new MsgToDBServiceSaveResult(getAddress(), dbServiceThreadAddress, game);
+        messageSystem.sendMessage(message);
+
         listOfGames.remove(game.getGameSessionId());
         String httpSessionId1 = game.getPlayer1SessionId();
         String httpSessionId2 = game.getPlayer2SessionId();
@@ -207,6 +246,8 @@ public class GameServiceImpl implements GameServiceThread {
         } else {
             answer.put("player_status", "default");
         }
+
+        requestToGetUserData(session);
 
         // send answer
         Gson gson = new Gson();
