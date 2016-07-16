@@ -99,7 +99,8 @@
 
         var self = this;
         var ws;
-        ws = new WebSocket("ws://" + window.location.hostname + ":8080/game");
+        var port = '80';
+        ws = new WebSocket("ws://" + window.location.hostname + ":" + port + "/game");
 
         ws.onopen = function (event) {
             self.init();
