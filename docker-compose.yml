@@ -8,8 +8,6 @@ services:
       - MYSQL_PASSWORD=boLfJ31
     volumes:
       - mysql-data:/var/lib/mysql
-    ports:
-      - "3307:3306"
     networks:
       - gameNet
     
@@ -20,7 +18,7 @@ services:
       - mysqlHost
     entrypoint: ./wait-for-it.sh mysqlHost:3306 --timeout=0 -- java -jar server.jar
     ports:
-      - "8080:8080"
+      - "80:8080"
     networks:
       - gameNet
 

@@ -1,7 +1,6 @@
 package servlets;
 
 import accounts.AccountService;
-import com.google.gson.Gson;
 import dbService.dataSets.UsersDataSet;
 import interfaces.Frontend;
 import org.springframework.context.ApplicationContext;
@@ -51,9 +50,7 @@ public class SignInServlet extends HttpServlet {
             }
 
             req.getSession().setAttribute("profile", user);
-            Gson gson = new Gson();
-            String json = gson.toJson(user);
-            response.sendRedirect("/homepage?message=" + "Login " + json);
+            response.sendRedirect("/homepage");
         } catch (Exception e) {
             e.printStackTrace();
         }
